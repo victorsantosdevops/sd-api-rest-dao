@@ -28,6 +28,12 @@ class Servico
     #[ORM\ManyToMany(targetEntity: Cliente::class, inversedBy: 'servicos')]
     private Collection $relation;
 
+    #[ORM\ManyToOne(inversedBy: 'relation')]
+    private ?Produto $produto = null;
+
+    #[ORM\OneToOne(mappedBy: 'relation', cascade: ['persist', 'remove'])]
+    private ?Pet $pet = null;
+
     public function __construct()
     {
         $this->relation = new ArrayCollection();
@@ -94,6 +100,35 @@ class Servico
     public function removeRelation(Cliente $relation): self
     {
         $this->relation->removeElement($relation);
+
+        return $this;
+    }
+
+    public function getProduto(): ?Produto
+    {
+        return $this->produto;
+    }
+
+    public function setProduto(?Produto $produto): self
+    {
+        $this->produto = $produto;
+
+        return $this;
+    }
+
+    public function getPet(): ?Pet
+    {
+        return $this->pet;
+    }
+
+    public function setPet(Pet $pet): self
+    {
+        // set the owning side of the relation if necessary
+        if ($pet->getRelation() !== $this) {
+            $pet->setRelation($this);
+        }
+
+        $this->pet = $pet;
 
         return $this;
     }
