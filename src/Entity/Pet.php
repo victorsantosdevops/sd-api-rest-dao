@@ -19,6 +19,10 @@ class Pet
     #[ORM\Column]
     private ?int $idade = null;
 
+    #[ORM\OneToOne(inversedBy: 'pet', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Servico $relation = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +48,18 @@ class Pet
     public function setIdade(int $idade): self
     {
         $this->idade = $idade;
+
+        return $this;
+    }
+
+    public function getRelation(): ?Servico
+    {
+        return $this->relation;
+    }
+
+    public function setRelation(Servico $relation): self
+    {
+        $this->relation = $relation;
 
         return $this;
     }
