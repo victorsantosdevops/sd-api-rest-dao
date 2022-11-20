@@ -34,9 +34,13 @@ class Servico
     #[ORM\OneToOne(mappedBy: 'relation', cascade: ['persist', 'remove'])]
     private ?Pet $pet = null;
 
+    #[ORM\ManyToMany(targetEntity: Pagamento::class, mappedBy: 'relation')]
+    private Collection $pagamentos;
+
     public function __construct()
     {
         $this->relation = new ArrayCollection();
+        $this->pagamentos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -129,6 +133,33 @@ class Servico
         }
 
         $this->pet = $pet;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Pagamento>
+     */
+    public function getPagamentos(): Collection
+    {
+        return $this->pagamentos;
+    }
+
+    public function addPagamento(Pagamento $pagamento): self
+    {
+        if (!$this->pagamentos->contains($pagamento)) {
+            $this->pagamentos->add($pagamento);
+            $pagamento->addRelation($this);
+        }
+
+        return $this;
+    }
+
+    public function removePagamento(Pagamento $pagamento): self
+    {
+        if ($this->pagamentos->removeElement($pagamento)) {
+            $pagamento->removeRelation($this);
+        }
 
         return $this;
     }
