@@ -28,6 +28,9 @@ class Servico
     #[ORM\ManyToMany(targetEntity: Cliente::class, inversedBy: 'servicos')]
     private Collection $relation;
 
+    #[ORM\ManyToOne(inversedBy: 'relation')]
+    private ?Produto $produto = null;
+
     public function __construct()
     {
         $this->relation = new ArrayCollection();
@@ -94,6 +97,18 @@ class Servico
     public function removeRelation(Cliente $relation): self
     {
         $this->relation->removeElement($relation);
+
+        return $this;
+    }
+
+    public function getProduto(): ?Produto
+    {
+        return $this->produto;
+    }
+
+    public function setProduto(?Produto $produto): self
+    {
+        $this->produto = $produto;
 
         return $this;
     }
