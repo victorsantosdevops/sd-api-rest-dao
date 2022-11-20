@@ -22,6 +22,9 @@ class Pessoa
     #[ORM\Column(length: 255)]
     private ?string $codNac = null;
 
+    #[ORM\ManyToOne(inversedBy: 'relation')]
+    private ?Endereco $endereco = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +62,18 @@ class Pessoa
     public function setCodNac(string $codNac): self
     {
         $this->codNac = $codNac;
+
+        return $this;
+    }
+
+    public function getEndereco(): ?Endereco
+    {
+        return $this->endereco;
+    }
+
+    public function setEndereco(?Endereco $endereco): self
+    {
+        $this->endereco = $endereco;
 
         return $this;
     }
