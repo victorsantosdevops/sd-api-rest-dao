@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PessoaRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PessoaRepository::class)]
@@ -31,6 +33,14 @@ class Pessoa
 
     #[ORM\OneToOne(mappedBy: 'no', cascade: ['persist', 'remove'])]
     private ?Funcionario $funcionario = null;
+
+    #[ORM\OneToMany(mappedBy: 'tipo', targetEntity: Cliente::class, orphanRemoval: true)]
+    private Collection $clientes;
+
+    public function __construct()
+    {
+        $this->clientes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -110,6 +120,36 @@ class Pessoa
         }
 
         $this->funcionario = $funcionario;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Cliente>
+     */
+    public function getClientes(): Collection
+    {
+        return $this->clientes;
+    }
+
+    public function addCliente(Cliente $cliente): self
+    {
+        if (!$this->clientes->contains($cliente)) {
+            $this->clientes->add($cliente);
+            $cliente->setTipo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCliente(Cliente $cliente): self
+    {
+        if ($this->clientes->removeElement($cliente)) {
+            // set the owning side to null (unless already changed)
+            if ($cliente->getTipo() === $this) {
+                $cliente->setTipo(null);
+            }
+        }
 
         return $this;
     }
