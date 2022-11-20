@@ -19,6 +19,10 @@ class Pet
     #[ORM\Column]
     private ?int $idade = null;
 
+    #[ORM\ManyToOne(inversedBy: 'relation')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Raca $raca = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +48,18 @@ class Pet
     public function setIdade(int $idade): self
     {
         $this->idade = $idade;
+
+        return $this;
+    }
+
+    public function getRaca(): ?Raca
+    {
+        return $this->raca;
+    }
+
+    public function setRaca(?Raca $raca): self
+    {
+        $this->raca = $raca;
 
         return $this;
     }
