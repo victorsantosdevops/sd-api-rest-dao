@@ -25,6 +25,10 @@ class Pessoa
     #[ORM\ManyToOne(inversedBy: 'relation')]
     private ?Endereco $endereco = null;
 
+    #[ORM\ManyToOne(inversedBy: 'relation')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Telefone $telefone = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,6 +78,18 @@ class Pessoa
     public function setEndereco(?Endereco $endereco): self
     {
         $this->endereco = $endereco;
+
+        return $this;
+    }
+
+    public function getTelefone(): ?Telefone
+    {
+        return $this->telefone;
+    }
+
+    public function setTelefone(?Telefone $telefone): self
+    {
+        $this->telefone = $telefone;
 
         return $this;
     }
