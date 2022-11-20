@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ServicoRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,6 +24,14 @@ class Servico
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $descricao = null;
+
+    #[ORM\ManyToMany(targetEntity: Cliente::class, inversedBy: 'servicos')]
+    private Collection $relation;
+
+    public function __construct()
+    {
+        $this->relation = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -60,6 +70,30 @@ class Servico
     public function setDescricao(?string $descricao): self
     {
         $this->descricao = $descricao;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Cliente>
+     */
+    public function getRelation(): Collection
+    {
+        return $this->relation;
+    }
+
+    public function addRelation(Cliente $relation): self
+    {
+        if (!$this->relation->contains($relation)) {
+            $this->relation->add($relation);
+        }
+
+        return $this;
+    }
+
+    public function removeRelation(Cliente $relation): self
+    {
+        $this->relation->removeElement($relation);
 
         return $this;
     }
