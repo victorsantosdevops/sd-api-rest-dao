@@ -29,6 +29,9 @@ class Pessoa
     #[ORM\JoinColumn(nullable: false)]
     private ?Telefone $telefone = null;
 
+    #[ORM\OneToOne(mappedBy: 'no', cascade: ['persist', 'remove'])]
+    private ?Funcionario $funcionario = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -90,6 +93,23 @@ class Pessoa
     public function setTelefone(?Telefone $telefone): self
     {
         $this->telefone = $telefone;
+
+        return $this;
+    }
+
+    public function getFuncionario(): ?Funcionario
+    {
+        return $this->funcionario;
+    }
+
+    public function setFuncionario(Funcionario $funcionario): self
+    {
+        // set the owning side of the relation if necessary
+        if ($funcionario->getNo() !== $this) {
+            $funcionario->setNo($this);
+        }
+
+        $this->funcionario = $funcionario;
 
         return $this;
     }
