@@ -28,7 +28,7 @@ class Pessoa
     private ?Endereco $endereco = null;
 
     #[ORM\ManyToOne(inversedBy: 'relation')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Telefone $telefone = null;
 
     #[ORM\OneToOne(mappedBy: 'no', cascade: ['persist', 'remove'])]

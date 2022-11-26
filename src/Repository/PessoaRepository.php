@@ -39,6 +39,24 @@ class PessoaRepository extends ServiceEntityRepository
         }
     }
 
+    public function findAll()
+    {
+        return $this->findBy(array(), array('nome' => 'ASC'));
+    }
+
+    public function listAll(): array
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'SELECT p
+            FROM App\Entity\Pessoa p
+            ORDER BY p.id ASC'
+        );
+
+        // returns an array of Product objects
+        return $query->getResult();
+    }
 //    /**
 //     * @return Pessoa[] Returns an array of Pessoa objects
 //     */
