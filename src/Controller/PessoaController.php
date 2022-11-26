@@ -83,5 +83,28 @@ class PessoaController extends AbstractController
         return $this->json([$json_response]);
     }
 
+    #[Route('/pessoas', name: 'get_pessoas',  methods: "GET")]
+    public function listPersons( ManagerRegistry $doctrine): JsonResponse
+    {
+        $pessoas = $doctrine->getRepository(Pessoa::class)->findAll();
+
+        $pages_array[] =
+        $lista_pessoas = [];
+
+        foreach ($pessoas as $pessoa) {
+            $nova_pessoa = array(
+                'nome' => $pessoa->getNome(),
+                'email' => $pessoa->getEmail(),
+                'codNac' => $pessoa->getCodNac()
+            );
+
+            $lista_pessoas[] = (object) $nova_pessoa;
+
+        }
+
+
+        return new JsonResponse($lista_pessoas);
+    }
+
 
 }
